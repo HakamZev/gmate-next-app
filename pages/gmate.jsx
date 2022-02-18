@@ -53,6 +53,7 @@ export default function gmate(props) {
 
             {props.sekuen.map(s => (
                 <CetakSoal
+                    key={s}
                     soal={dfSoal[s]}
                     kondisi={props.kondisiByKey[dfSoal[s].ref]}
                 />

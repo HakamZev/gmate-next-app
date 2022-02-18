@@ -15,7 +15,7 @@ export default function Pilihan ({soal}) {
 
         <ol style={{listStyleType: "upper-alpha"}}>
             {daftar.sort (() => Math.random () -0.5).map(d => (
-                <li seq={d.seq}>
+                <li ket= {d.seq} seq={d.seq}>
                     <div dangerouslySetInnerHTML={{__html: d.Text}} />
                 </li>
             ))}
