@@ -2,11 +2,32 @@ import connect from "../lib/database"
 import {
     objectify,
     getTestSequence,
-    randomGroupKeys
+    randomGroupKeys,
+    groupByKey
 } from "gmate"
 
+function CetakSoal ({ soal, kondisi }) {
+    return (
+        <div>
+            <div dangerouslySetInnerHTML={{__html: kondisi.seq}} />
+            <div dangerouslySetInnerHTML={{__html: kondisi.konten}} />
+            <div dangerouslySetInnerHTML={{__html: soal.seq}} />
+            <div dangerouslySetInnerHTML={{__html: soal.konten}} />
+            <ol style={{listStyleType: "upper-alpha"}}>
+                <li style={{ backgroundColor: "white" }}><div dangerouslySetInnerHTML={{__html: soal.b}} /></li>
+                <li><div dangerouslySetInnerHTML={{__html: soal.c}} /></li>
+                <li><div dangerouslySetInnerHTML={{__html: soal.d}} /></li>
+                <li><div dangerouslySetInnerHTML={{__html: soal.a}} /></li>
+                <li><div dangerouslySetInnerHTML={{__html: soal.e}} /></li>
+            </ol>
+        </div>
+    )
+}
+
 export default function gmate(props) {
-    const soal = props.soalByKey.S15
+    const soal = props.soalByKey[props.sekuen[0]]
+    const dfSoal = props.soalByKey
+
 
     return (
         <div style={{
@@ -16,14 +37,26 @@ export default function gmate(props) {
             backgroundColor: 'orange'
         }}>
             <h1>G-Mate Test {props.dfSoal.length}</h1>
-            <pre>{JSON.stringify (props.leaders)}</pre>
-            {/* <pre>{JSON.stringify (props.soalByKey, null, 2)}</pre> */}
+
+            {/* <pre>{JSON.stringify (props.leaders)}</pre>
+            <pre>{JSON.stringify (soal, null, 2)}</pre>
+            <pre>{JSON.stringify (props.kondisiByKey[soal.ref], null, 2)}</pre>
+            <pre>{JSON.stringify (props.sekuen, null, 2)}</pre>
             <p>{soal.konten}</p>
             <p>{soal.a}</p>
             <p>{soal.b}</p>
             <p>{soal.c}</p>
             <p>{soal.d}</p>
-            <p>{soal.e}</p>
+            <p>{soal.e}</p> */}
+
+            {/* <CetakSoal soal={soal} kondisi={props.kondisiByKey[soal.ref]}/> */}
+
+            {props.sekuen.map(s => (
+                <CetakSoal
+                    soal={dfSoal[s]}
+                    kondisi={props.kondisiByKey[dfSoal[s].ref]}
+                />
+            ))}
         </div>
     )
 }
@@ -43,14 +76,24 @@ export const getServerSideProps = async () => {
     // console.log(soalByKey);
 
     const sekuen = getTestSequence (rs, leaders)
-    console.log(sekuen);
+    // console.log(sekuen);
+
+    const groupKeys = randomGroupKeys (groupByKey(rs), leaders)
+    // console.log(groupKeys);
+
+    const rs3 = await db.all ("SELECT * FROM kondisi")
+    // console.log(rs3);
+
+    const kondisiByKey = objectify (rs3)
+    console.log(kondisiByKey);
 
     return {
         props: {
             dfSoal: rs,
             leaders,
             soalByKey,
-            sekuen
+            sekuen,
+            kondisiByKey
         }
     }
 }
