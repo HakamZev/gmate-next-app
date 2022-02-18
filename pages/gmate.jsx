@@ -1,4 +1,5 @@
 import connect from "../lib/database"
+import {Condition, Soal} from "samplebook"
 import {
     objectify,
     getTestSequence,
@@ -38,8 +39,8 @@ export default function gmate(props) {
         }}>
             <h1>G-Mate Test {props.dfSoal.length}</h1>
 
-            {/* <pre>{JSON.stringify (props.leaders)}</pre>
-            <pre>{JSON.stringify (soal, null, 2)}</pre>
+            <pre>kondisi{JSON.stringify (Soal("S01"), null, 2)}</pre>
+            {/* <pre>{JSON.stringify (soal, null, 2)}</pre>
             <pre>{JSON.stringify (props.kondisiByKey[soal.ref], null, 2)}</pre>
             <pre>{JSON.stringify (props.sekuen, null, 2)}</pre>
             <p>{soal.konten}</p>
